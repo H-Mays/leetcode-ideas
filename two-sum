@@ -1,0 +1,67 @@
+
+[array,map]------why map???
+#description: 
+given an array of integers and a target number, find two such that they add up to a specific target number.
+
+#input & output
+Input: numbers={2, 7, 11, 15}, target=9
+Output: index1=1, index2=2
+
+#train of thought：
+在数列中找两个数，其和等于目标值。输出下标。
+如果有序，则可以从小到大枚举第一个数，然后从后往前枚举第二个数，而因为当第一个数增大时，第二个数必须递减，也就是最多第一个数往后扫一遍，第二个数则相应从末尾往前收敛，在两者相遇（此时无解）前能找到解，也就是O(n)找解。
+此时没有注意到最后需要的是下标。
+
+于是决定先sort，可是sort完下标都乱了，为了保存下标，先是尝试了hash_map找一一对应的下标，发现 leetcode 没有收录 hash_map，换 map。但是虽然题意保证唯一解，意味着至多有两个相同的，但相同的数还是可能出现（0+0=0的样例，回来找0的时候只找到一个）。于是...机智的我想到了pair，带着亲爱的下标一起 sort 就阖家欢乐了
+
+哎╮(╯▽╰)╭太久不写题，发现自己不会编程了.......囧
+10+A。算是尝试了下leetcode大法——用交题来debug！慢慢习惯就好~
+
+这题的标签是[array,map]。没太清楚她的map是怎么用的。我的标签是[array,pair]
+
+#skill
+1. vector: myvec.clear(),push_back(),pop_back()
+2.pair:
+
+pair<int,int> b;
+b = make_pair(3,4);
+map:
+map<int, String> mymap;
+mymap[3] = "iloveMay" ;
+#point: 
+1. the array is not sorted.
+2. the numbers may be negative.
+3. he want the increasing indexes, but not the numbers.
+
+#code
+
+/* time: O(nlog(n)), space: O(n)*/
+typedef pair<int, int> pp;
+class Solution {
+public:
+    static bool cmp(pp a, pp b){
+        if(a.second == b.second) return a.first < b.first;
+        return a.second < b.second;
+    }
+    vector<int> twoSum(vector<int> &numbers, int target) {
+        int sizy = numbers.size();
+        vector <pp> num;
+        for(int i = 0; i < sizy; i++){
+            num.push_back(make_pair(i+1,numbers[i]));
+        }
+        sort(num.begin(),num.end(),cmp);
+        int a = 0, b = sizy-1;
+        while(1){
+            while(num[a].second+num[b].second > target) b = b-1;
+            if(num[a].second+num[b].second == target) break;
+            else a = a+1;
+        }
+        vector<int> ans;
+        int ans1 = num[a].first;
+        int ans2 = num[b].first;
+        if(ans1>ans2) swap(ans1, ans2);
+        ans.push_back(ans1);
+        ans.push_back(ans2);
+        return ans;
+    }
+};
