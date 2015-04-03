@@ -1,4 +1,5 @@
 /*两个单链表相加。基础*/
+1. in c++
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -30,3 +31,30 @@ public:
         return head->next;
     }
 };
+
+2. in python
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    # @return a ListNode
+    def addTwoNumbers(self, l1, l2):
+        c = 0
+        ans = [ListNode(0)]
+        p = l1
+        q = l2
+        while(not(c == 0 and p == None and q == None)):
+            a = p.val if p != None else 0
+            b = q.val if q != None else 0
+            tsum = a+b+c
+            c = tsum // 10
+            tsum = tsum % 10
+            ans.append(ListNode(tsum))
+            ans[-2].next = ans[-1]
+            p = p.next if p != None else None
+            q = q.next if q != None else None
+        return ans[1]
