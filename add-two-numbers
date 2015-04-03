@@ -57,4 +57,4 @@ class Solution:
             ans[-2].next = ans[-1]
             p = p.next if p != None else None
             q = q.next if q != None else None
-        return ans[1]
+        return ans[1] # 返回了ans,报错为TLE
